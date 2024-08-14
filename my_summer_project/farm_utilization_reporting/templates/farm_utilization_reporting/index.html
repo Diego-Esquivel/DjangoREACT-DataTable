@@ -1,0 +1,102 @@
+
+
+<script>
+    function createEeventListener(){
+        
+    }
+    
+    var data = [1,0,0,0,57];
+    function setupPage(){
+        var window_height = (window.innerHeight);
+        var window_width = (window.innerWidth);
+        var myheight = window.innerHeight/4.;
+        var mywidth = window.innerWidth*.99;
+        var range = (Math.max(...data) - Math.min(...data)) + (((Math.max(...data) - Math.min(...data))%10 == 0) ? 10 : 10-(Math.max(...data) - Math.min(...data))%10);
+        proportions = myheight/range;
+        let ybar = document.createElement("canvas");
+        //ybar.style["display"] = "inline";
+        ///ybar.style["position"] = "relative";
+        let ybarctx = ybar.getContext("2d");
+        ybar.width = (window.innerWidth*.9)/10;
+        ybar.height = myheight;
+        ybar.style.background = "#FFF";
+        ybarctx.lineWidth = 3;
+        ybarctx.beginPath();
+        ybarctx.strokeStyle = "#000";
+        ybarctx.moveTo(0,0);
+        ybarctx.lineTo(ybar.width,0);
+        ybarctx.lineTo(ybar.width,ybar.height);
+        ybarctx.lineTo(0,ybar.height);
+        ybarctx.closePath();
+        ybarctx.stroke();
+        ybarctx.beginPath();
+        for(var i = 10; i <= range; i+=10){
+            ybarctx.moveTo(ybar.width, ybar.height-(proportions*(i)));
+            ybarctx.lineTo(ybar.width-(ybar.width/15.),ybar.height-(proportions*(i)));
+            ybarctx.fillText(i.toString(),ybar.width-(ybar.width/5),ybar.height-(proportions*i));
+        }
+        ybarctx.stroke();      
+                
+        let canvas = document.createElement("canvas");
+        let context = canvas.getContext("2d");
+        
+        canvas.width = mywidth-(ybar.width+20);
+        canvas.height = window_height/4;
+        
+        
+        canvas.style.background = "#ddf"
+        context.lineWidth = 1;
+        context.beginPath();
+        context.strokeStyle = "#F00";
+        context.moveTo(0,((60-data[0])*proportions));
+        for(var i = 1; i < data.length; i++){
+            context.lineTo(canvas.width/(data.length-1)*i,((60.-data[i])*proportions))
+        }
+        context.stroke();
+        
+        context.strokeStyle = "#0F0";
+        context.lineWidth = 1;
+        context.fillStyle = "#0F0"
+        for(var i = 0; i < data.length; i++){
+            context.beginPath();
+            context.arc(canvas.width/(data.length-1)*i,((60.-data[i])*proportions),4,0,Math.PI*2);
+            context.fill()
+            context.stroke();
+        }
+        /*
+        prints a circle to screen
+        context.beginPath();
+        context.strokeStyle = "#00F";
+        context.arc(mywidth/2,myheight/2,20,0,Math.PI*2);
+        context.fillStyle = "#00F";
+        context.fill();
+        context.stroke();
+        */
+        context.lineWidth = 1;
+        context.setLineDash([5,15]);
+        for(var i = 10; i <= range; i+=10){
+            context.moveTo(canvas.width, canvas.height-(proportions*(i)));
+            context.lineTo(canvas.width-(canvas.width),canvas.height-(proportions*(i)));
+            //context.fillText(i.toString(),canvas.width-(canvas.width),canvas.height-(proportions*i));
+        }
+        context.stroke();
+        //canvas.style["display"] = "absolute";
+        canvas.style["position"] = "absolute";
+        //canvas.style["left"] = ybar.width;
+        document.body.style["overflow"] = "scroll"
+        document.body.appendChild(document.createElement("div"))
+
+        document.body.getElementsByTagName("div")[0].appendChild(ybar)
+        document.body.getElementsByTagName("div")[0].appendChild(canvas)
+        //context.arc(0,((60-data[0])*proportions),1,0,Math.PI*2);
+        //context.arc(0,((60-data[1])*proportions),1,0,Math.PI*2);
+        //context.arc(0,((60-data[2])*proportions),1,0,Math.PI*2);
+        //context.arc(0,((60-data[3])*proportions),1,0,Math.PI*2);
+        //context.arc(0,((60-data[4])*proportions),1,0,Math.PI*2);
+        //createEventListener()
+        
+    }
+    
+    if(window.addEventListener) window.addEventListener("load",setupPage,false);
+    else if(window.attachEvent) window.attachEvent("onload",setupPage);
+</script>

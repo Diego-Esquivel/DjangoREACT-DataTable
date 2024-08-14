@@ -1,0 +1,4 @@
+* {background-color: rgb(251, 251, 250);}
+table, th, td {border:1px solid black;text-align: left;border-collapse:separate;border-spacing:0}
+th {background-color: red;color:white;}
+#table-header * {border-color:red;}

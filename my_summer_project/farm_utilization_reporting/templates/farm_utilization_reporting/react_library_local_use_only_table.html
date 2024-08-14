@@ -1,0 +1,60 @@
+<script type="text/babel">
+
+	/*
+	*	The Rows function. Returns a table header row and table body rows as a REACT fragment
+	*		data - A 2D array. Index 0 has labels that should be used in the table header. Index 1 has data that should be included in the table body rows
+	*/
+	function Rows({data}){
+		let rows = [];	// Initialize empty rows array
+		for(var i = 0; i < data[0].length; i++){	// Iterate through each item in the labels
+			rows.push([]);	// Append an empty array for the current row
+			for(var j = 0; j < data[1].length; j++){	// Iterate through each item in the body data
+				if(j == 2 )	// Hey. This is specific to the data requested by the 'data/datadata/' url. Consider using useState to better manage this component
+					rows[i].push(<a href={"http://128.247.79.103:8000/farm_utilization/list/?q="+data[0][i][data[1][0]]}>{data[0][i][data[1][j]]}</a>)	// Append body data with a link to a set of boards
+				else if(j==1)	// Hey. This is specific to the data requested by the 'data/datadata/' url. Consider using useState to better manage this component
+					rows[i].push(<a href={"http://128.247.79.103:8000/farm_utilization/listpending/?q="+data[0][i][data[1][0]]}>{data[0][i][data[1][j]]}</a>)	// Append body data with a link to a set of tests
+				else
+					rows[i].push(data[0][i][data[1][j]])	// Append body data to rows array
+			}
+		}
+		const table_row_length = rows.length
+		data[1].push("Total Number of Items");	// Hey. This is specific to the data requested by the 'data/datadata/' url. Consider using useState to better manage this component
+		try{	// If the list body data is not empty then sum the values in the second column
+			rows[0].push(rows.reduce((accumulator,currentValue) => accumulator + parseFloat(currentValue[1].props.children),0));	// Hey. This is specific to the data requested by the 'data/datadata/' url. Consider using useState to better manage this component
+		}catch(ExceptionVar){	// Else, force it to 0
+			data[0].push(0)
+		}
+		const final_header = <tr id="table-header">{data[1].map(label => <th>{label}</th>)}</tr>;	// Build the row for the table header
+		var counter_rows = 0
+		var counter_cols = 0
+		const final_data = rows.map((xy,{b=counter_rows},{c=counter_cols},d=table_row_length) => {	// Build the rows for the body rows
+			return <tr>{xy.map((item,{tb=counter_rows},{tc=counter_cols},td=table_row_length) => {	
+				if(counter_rows == 0 && counter_cols < 5){ // If building the first row
+					if(counter_cols != 4){	// If the body column is not the last column in the first row then treat it like a normal column // Hey. This is specific to the data requested by the 'data/datadata/' url. Consider using useState to better manage this component
+						counter_cols++; return <td>{item}</td>;
+					}else{	// Else, it is the last column in the first row so make it span the length of the table
+						counter_rows++; return <td rowSpan={table_row_length}>{item}</td>;
+					}
+				}else{	// Else, we are past the first row, the rest of the table is the built the same // Hey. This is specific to the data requested by the 'data/datadata/' url. Consider using useState to better manage this component
+					return <td>{item}</td>;
+				}
+			})}</tr>
+		});
+		return <><thead>{final_header}</thead><tbody>{final_data}</tbody></>
+	}
+	
+	/*
+	*	The MyTable function. Returns a table populated with the Rows function.
+	*		data - A 2D array. Index 0 has labels that should be used in the table header. Index 1 has data that should be included in the table body rows
+	*/
+	export function MyTable({data}){
+		const [cdata, setData] = React.useState(data)
+		
+		return <table onClick={e => {if(typeof(data_data[2])!="string") setData(data_data[2]);}}><Rows data={cdata} /></table>
+	}	
+	/*
+	*	The MyApp function. Returns a fragment populated by the MyTable function.
+	*		data - A 2D array. Index 0 has labels that should be used in the table header. Index 1 has data that should be include din the table body rows
+	*/
+
+</script>

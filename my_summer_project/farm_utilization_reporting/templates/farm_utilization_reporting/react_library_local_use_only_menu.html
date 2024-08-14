@@ -1,0 +1,63 @@
+<script type="text/babel">
+	export function MyMenu({data}){
+		async function handleSubmit(e) {
+			// Prevent the browser from reloading the page
+			e.preventDefault();
+			// Read the form data
+			const form = e.target;
+			const formData = new FormData(form);
+			// You can pass formData as a fetch body directly:
+			var appendedData = (new URLSearchParams(formData).toString());
+			
+				let response = await fetch('./datadata_dep/?' + appendedData, { method: form.method});
+				if(!response.ok){
+					console.log("No good");
+					console.log(response.Response);
+				}
+				else{
+				const json = await response.text();
+				//MyTable.
+				//data_data = json.slice(10)
+
+				data_data[2] = JSON.parse(json).response
+				document.getElementsByTagName('table')[0].click();
+				}
+			
+			// You can generate a URL out of it, as the browser does by default:
+			// You can work with it as a plain object.
+			//const formJson = Object.fromEntries(formData.entries());
+			//console.log(formJson); // (!) This doesn't include multiple select values
+			// Or you can get an array of name-value pairs.
+			//console.log([...formData.entries()]);
+		}
+		const [selectedPlats, setSelectedPlats] = React.useState(['']);
+		const [selectedCaps, setSelectedCaps] = React.useState(['']);
+		const [selectedDates, setSelectedDates] = React.useState(['']);
+		var final_platforms = []
+		var final_capabilities = []
+		var final_dates = []
+		for(let i = 0; i < data[0].length; i++){
+			final_platforms.push(<option value={data[0][i]}>{data[0][i]}</option>)
+		}
+		for(let i = 0; i < data[1].length; i++){
+			final_capabilities.push(<option value={data[1][i]}>{data[1][i]}</option>)
+		}
+		for(let i = 0; i < data[2].length; i++){
+			final_dates.push(<option value={data[2][i]}>{data[2][i]}</option>)
+		}
+		/*<select>
+		<option value="someOption">Some option</option>
+		<option value="otherOption">Other option</option>
+		</select>*/
+		return <><form method="get" onSubmit={handleSubmit}>
+				 <label>Select platform(s): <select size={data[0].length/6 > 1 ? 6 : data[0].length} multiple onChange={e => {const options = [...e.target.selectedOptions]; const values = options.map(option => option.value); setSelectedPlats(values)}} name="pl" id="platform_select">{final_platforms}</select> {selectedPlats.join(', ')}</label>
+					<hr/>
+				 <label>Select global capabilities: <select size={data[1].length/10 > 10 ? 10 : data[1].length} multiple onChange={e => {const options = [...e.target.selectedOptions]; const values = options.map(option => option.value); setSelectedCaps(values)}} name="gc" id="capability_select">{final_capabilities}</select>{selectedCaps.join(', ')}</label>
+				 	<hr/>
+				 <label>Select date range: <select size={data[2].length/10 > 1 ? 10: data[2].length} multiple onChange={e => {const options = [...e.target.selectedOptions]; const values = options.map(option => option.value); setSelectedDates(values)}} name="dates" id="dates_range">{final_dates}</select>{selectedDates.join(' - ')}</label>
+				 	<hr/>
+				 <button type="submit">Submit</button>
+					</form>
+			   </>
+	}
+</script>

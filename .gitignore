@@ -1,0 +1,11 @@
+migrations/
+test.py
+asgi.py
+__pycache__/
+*copy*
+*thing*
+*.save
+.vscode/
+*.log
+TEST_CLASSES/
+*.sqlite3 

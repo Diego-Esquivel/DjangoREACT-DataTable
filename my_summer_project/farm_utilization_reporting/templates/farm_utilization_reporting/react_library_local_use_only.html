@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles">
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src={{where_to_get_data}}></script><!-- Django syntax. Will be replaced by a context. Should be replaced by the endpoint where this script should get data from -->
+    {% for item in components_required_to_do_the_stuff %}
+      {% include item %}
+    {% endfor %}
+    <script type="text/babel">		
+		function MyApp({data}) {
+      const [cdata, setData] = React.useState(data)
+      function onSubmit(e){
+        
+        //document.getElementsByTagName('table')[0].remove();
+      }
+			return <div onSubmit={onSubmit}>{{component_list|safe}}</div>;
+		}
+
+		const container = document.getElementById('root');	// Get the root element
+		const root = ReactDOM.createRoot(container);	// Do the REACT thing
+		root.render(<MyApp data={{var_name}} />);	// Render the REACT component in the body
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>
